@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+.venv/
+.env/
+
+# IDEs
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Database files
+*.sqlite3
+*.db
+
+# Alembic
+app/db/migrations/*.pyc
+app/db/migrations/versions/*.pyc
+app/db/migrations/__pycache__/
+
+# Env files
+.env
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Coverage
+.coverage
+htmlcov/
+*.cover
+*.py,cover
+
+# Pytest
+.pytest_cache/
+
+# Mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pipenv / Poetry
+Pipfile.lock
+poetry.lock
