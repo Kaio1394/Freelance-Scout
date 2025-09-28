@@ -1,0 +1,11 @@
+workana:
+  search_input: "//input[@id='Query']"
+  search_button: "//button[@class='search icon']"
+  div_list_project_item: "//div[@id='projects']"
+  project_item: "//div[(contains(@class, 'project-item'))][INDEX_PROJECT]"
+  project_title: "//div[(contains(@class, 'project-item'))][INDEX_PROJECT]//h2//span//span"
+  project_profile_star: "//div[(contains(@class, 'project-item'))][INDEX_PROJECT]//span[@class='profile-stars']/span"
+  project_publication_date: "//div[(contains(@class, 'project-item'))][INDEX_PROJECT]//div[contains(@class,'project-main-details')]/span[@class='date']"
+  project_bids_count: "//div[(contains(@class, 'project-item'))][INDEX_PROJECT]//div[contains(@class,'project-main-details')]/span[@class='date']"
+  project_skills: "//div[(contains(@class, 'project-item'))][INDEX_PROJECT]//div[@class='skills']//a[INDEX_SKILL]"
+  project_about: "//section//section[contains(@class, 'col-md')]//div[@class='expander']"

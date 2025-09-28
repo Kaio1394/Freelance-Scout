@@ -12,7 +12,7 @@ from selenium.webdriver.remote.webelement import WebElement
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
-from selenium import Web
+import time
 
 class SeleniumHelper:
     def __init__(self, browser: str = "chrome", headless: bool = True, user_agent: str | None = None):
@@ -25,7 +25,7 @@ class SeleniumHelper:
         if self.browser == "chrome":
             opts = ChromeOptions()
             if self.headless:
-                opts.add_argument("--headless=new")
+                # opts.add_argument("--headless=new")
                 opts.add_argument("--disable-gpu")
                 opts.add_argument("--no-sandbox")
             if self.user_agent:
@@ -36,9 +36,9 @@ class SeleniumHelper:
     def open_url(self, url: str):
         self.driver.get(url)
         
-    def wait_element(self, by: By, selector: str, timeout: float = 5.0) -> WebElement:
+    def wait_element(self, by: str, selector: str, timeout: float = 5.0) -> WebElement:
         return WebDriverWait(self.driver, timeout).until(
-            EC.visibility_of_element_located((by, selector))
+            EC.visibility_of_element_located((self._get_by(by), selector))
         )
         
     def get_title(self):
@@ -49,3 +49,29 @@ class SeleniumHelper:
             self.driver.close()
         except Exception:
             pass
+        
+    def click(self, by: str, selector: str):
+        self.wait_element(by, selector).click()
+    
+    def set_text(self, by: str, selector: str, text: str, keystrokes_delays: bool = False, delay: float = 1.0):
+        if keystrokes_delays:
+            for char in text:
+                self.wait_element(by, selector).send_keys(char)
+                time.sleep(delay)
+        else:
+            self.wait_element(by, selector).send_keys(text)
+        
+    def _get_by(self, by: str) -> By:
+        match by.lower().strip():
+            case "id":
+                return By.ID
+            case "xpath":
+                return By.XPATH
+            case "class":
+                return By.CLASS_NAME
+            case "name":
+                return By.NAME
+            case "tag_name":
+                return By.TAG_NAME
+            case _:
+                raise ValueError("Type of By invalid.")
