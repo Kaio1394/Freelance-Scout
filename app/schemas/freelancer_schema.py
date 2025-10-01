@@ -1,4 +1,9 @@
 from pydantic import BaseModel
 
 class FreelancerBase(BaseModel):
-    pass
+    title: str
+    about: str
+    author: str
+    budget: str
+    stars: str
+    skills: list[str]

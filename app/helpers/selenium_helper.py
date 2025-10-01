@@ -37,9 +37,13 @@ class SeleniumHelper:
         self.driver.get(url)
         
     def wait_element(self, by: str, selector: str, timeout: float = 5.0) -> WebElement:
-        return WebDriverWait(self.driver, timeout).until(
-            EC.visibility_of_element_located((self._get_by(by), selector))
-        )
+        try:
+            return WebDriverWait(self.driver, timeout).until(
+                EC.visibility_of_element_located((self._get_by(by), selector))
+            )
+        except Exception:
+            return None
+    
         
     def get_title(self):
         return self.driver.title
@@ -49,6 +53,15 @@ class SeleniumHelper:
             self.driver.close()
         except Exception:
             pass
+        
+    def get_attribute(self, by: str, selector: str, attribute: str):
+        return self.driver.find_element(self._get_by(by), selector).get_attribute(attribute)
+        
+    def get_text(self, by: str, selector: str) -> str:
+        try:
+            return self.driver.find_element(self._get_by(by), selector).text
+        except Exception:
+            return ""
         
     def click(self, by: str, selector: str):
         self.wait_element(by, selector).click()
