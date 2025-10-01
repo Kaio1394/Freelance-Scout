@@ -1,6 +1,8 @@
 workana:
   search_input: "//input[@id='Query']"
   search_button: "//button[@class='search icon']"
+  search_pagination: "//ul[@class='pagination']"
+  button_pagination: "//ul[@class='pagination']/li/a[text()='INDEX_PAG']"
   div_list_project_item: "//div[@id='projects']"
   empty_search: "//div[@class='js-empty-search']"
   empty_search_text: "//div[@class='js-empty-search']/p/em"
@@ -16,3 +18,5 @@ workana:
 
   div_cookies: "//div[@class='ot-sdk-row']"
   accept_cookies: "//button[@id='onetrust-accept-btn-handler']"
+  div_register: "//div[@class='container']/a[contains(text(),'Registre-se como Freelancer')]"
+  button_close_register_div: "//button[@class='close']"

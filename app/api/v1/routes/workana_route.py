@@ -2,6 +2,8 @@ from fastapi import APIRouter, Depends, Header, HTTPException, status
 from app.services.workana_service import WorkanaService
 from app.dependencies import get_workana_service
 from app.schemas.freelancer_schema import FreelancerBase
+import time
+from app.schemas.response_schema import ResponseSearchJobs
 
 workana_route_v1 = APIRouter(prefix="/api/v1/workana", tags=["Workana"])
 
@@ -13,13 +15,18 @@ def search_freelancer(job: str = Header(...), service: WorkanaService = Depends(
             service.click_accept_cookies()
         service.set_text_search_job(job)
         service.click_seach_job()
+        time.sleep(5)
         search_return_result = service.card_job_exist(1)
         if not search_return_result:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="No projects were found that match your search criteria."
             )
+        if service.div_register_exist():
+            service.click_close_div_register()
+            
         list_jobs: list[FreelancerBase] = service.get_all_jobs()
+        return ResponseSearchJobs(len(list_jobs), list_jobs)
     except Exception as err:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
