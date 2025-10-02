@@ -8,7 +8,7 @@ from app.schemas.response_schema import ResponseSearchJobs
 workana_route_v1 = APIRouter(prefix="/api/v1/workana", tags=["Workana"])
 
 @workana_route_v1.post("/search/freelancer")
-def search_freelancer(job: str = Header(...), service: WorkanaService = Depends(get_workana_service)):
+def search_freelancer(job: str = Header(...), limit_search: int = Header(...), service: WorkanaService = Depends(get_workana_service)):
     try:
         service.navigate_to_freelancer_jobs_page()
         if service.div_cookies_exist():
@@ -25,8 +25,8 @@ def search_freelancer(job: str = Header(...), service: WorkanaService = Depends(
         if service.div_register_exist():
             service.click_close_div_register()
             
-        list_jobs: list[FreelancerBase] = service.get_all_jobs()
-        return ResponseSearchJobs(len(list_jobs), list_jobs)
+        list_jobs: list[FreelancerBase] = service.get_all_jobs(limit_search)
+        return ResponseSearchJobs(quantity_jobs=len(list_jobs), jobs=list_jobs)
     except Exception as err:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

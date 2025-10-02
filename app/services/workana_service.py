@@ -85,15 +85,24 @@ class WorkanaService:
     #         return False
     #     return True
     
-    def get_all_jobs(self) -> list[FreelancerBase]:
+    def get_all_jobs(self, limit: int = None) -> list[FreelancerBase]:
         list_jobs: list[FreelancerBase] = []
+        counter: int = 1
+        stop_exec: bool = False
+        if limit <= 0:
+            raise ValueError("Limit can't be less or equal than zero.")
         try: 
             # count_pages: int = self.get_count_page_search()
             count_pages: int = 50                  
             for page_count in range(count_pages + 1):
+                if stop_exec:
+                    break
                 if page_count == 0:
                     continue
                 for i in itertools.count():
+                    if counter > limit:
+                        stop_exec = True
+                        break
                     try:
                         if i == 0:
                             continue
@@ -112,8 +121,8 @@ class WorkanaService:
                             skills=skills
                         )
                         list_jobs.append(freelancer)
+                        counter += 1
                     except Exception as err:
-                        teste = str(err)
                         break
                 self.click_button_pagination(page_count)
             return list_jobs
