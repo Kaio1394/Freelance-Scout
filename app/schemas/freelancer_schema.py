@@ -7,3 +7,4 @@ class FreelancerBase(BaseModel):
     budget: str
     stars: str
     skills: list[str]
+    link: str

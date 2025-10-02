@@ -4,6 +4,8 @@ from app.schemas.freelancer_schema import FreelancerBase
 import itertools
 import time
 
+URL_BASE_WORKANA = 'https://www.workana.com'
+
 class WorkanaService:
     def __init__(self, selenium_helper: SeleniumHelper):
         self.selenium_helper = selenium_helper
@@ -111,14 +113,16 @@ class WorkanaService:
                         author = self.get_attribute_project("author", i)
                         budget = self.get_attribute_project("budget", i)
                         stars = self.get_attribute_project("stars", i)
-                        skills = self.get_attribute_project("skills", i) or []                      
+                        skills = self.get_attribute_project("skills", i) or [] 
+                        link = self.get_attribute_project("link", i)                    
                         freelancer = FreelancerBase(
                             title=title,
                             about=about,
                             author=author,
                             budget=budget,
                             stars=stars,
-                            skills=skills
+                            skills=skills,
+                            link=link
                         )
                         list_jobs.append(freelancer)
                         counter += 1
@@ -161,15 +165,16 @@ class WorkanaService:
             case "about":
                 selector = SELECTORS['workana']['project_about']
             case "stars":
-                selector = SELECTORS['workana']['project_profile_star']
+                selector = str(SELECTORS['workana']['project_profile_star']).replace('INDEX_PROJECT', f'{str(index)}')
+                return self.selenium_helper.get_attribute("xpath", selector, "title")
             case "skills":
                 list_skills = self.get_list_skills(index)
                 return list_skills
+            case "link":
+                selector = str(SELECTORS['workana']['project_link']).replace('INDEX_PROJECT', f'{str(index)}')
+                return self.selenium_helper.get_attribute("xpath", selector, "href")
             case _:
                 raise ValueError(f"Value '{attribute}' invalid.")
         selector = selector.replace('INDEX_PROJECT', f'{str(index)}')
-        if attribute == "stars":
-            text = self.selenium_helper.get_attribute("xpath", selector, "title")
-        else:
-            text = self.selenium_helper.get_text("xpath", selector)
+        text = self.selenium_helper.get_text("xpath", selector)
         return text

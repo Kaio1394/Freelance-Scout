@@ -12,8 +12,9 @@ workana:
   project_publication_date: "//div[(contains(@class, 'project-item'))][INDEX_PROJECT]//div[contains(@class,'project-main-details')]/span[@class='date']"
   project_bids_count: "//div[(contains(@class, 'project-item'))][INDEX_PROJECT]//div[contains(@class,'project-main-details')]/span[@class='date']"
   project_skills: "//div[(contains(@class, 'project-item'))][INDEX_PROJECT]//div[@class='skills']//a[INDEX_SKILL]/h3"
-  project_about: "//div[(contains(@class, 'project-item'))][1]//div[contains(@class,'project-details')]//span"
-  project_budget: "//h4[@class='budget']/span[@class='values']/span"
+  project_about: "//div[(contains(@class, 'project-item'))][INDEX_PROJECT]//div[contains(@class,'project-details')]//span"
+  project_budget: "//div[(contains(@class, 'project-item'))][INDEX_PROJECT]//h4[@class='budget']/span[@class='values']/span"
+  project_link: "//div[(contains(@class, 'project-item'))][INDEX_PROJECT]//h2[contains(@class,'project-title')]//a"
   project_author: "//div[(contains(@class, 'project-item'))][INDEX_PROJECT]//div[contains(@class,'project-author')]/span[2]/a/span"
 
   div_cookies: "//div[@class='ot-sdk-row']"
