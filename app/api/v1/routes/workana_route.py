@@ -13,15 +13,15 @@ def search_freelancer(job: str = Header(...), limit_search: int = Header(...),
                       service: WorkanaService = Depends(get_workana_service), 
                       email_service: EmailService = Depends(get_email_service)):
     try:
-        email_service.define_credentials()
-        email_service.define_configs_email("Testando Kaio", "TESTEEEEE")    
-        connect, msg_erro = email_service.connect()
-        if not connect:
-            return HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail=f"Internal error: {msg_erro}"
-            )
-        email_service.send() 
+        # email_service.define_credentials()
+        # email_service.define_configs_email("Testando Kaio", "TESTEEEEE")    
+        # connect, msg_erro = email_service.connect()
+        # if not connect:
+        #     return HTTPException(
+        #         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        #         detail=f"Internal error: {msg_erro}"
+        #     )
+        # email_service.send()
         
         service.navigate_to_freelancer_jobs_page()
         if service.div_cookies_exist():
@@ -45,3 +45,13 @@ def search_freelancer(job: str = Header(...), limit_search: int = Header(...),
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Internal error: {str(err)}"
         )
+    finally:
+        email_service.define_credentials()
+        email_service.define_configs_email("Testando Kaio", "TESTEEEEE")    
+        connect, msg_erro = email_service.connect()
+        if not connect:
+            return HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Internal error: {msg_erro}"
+            )
+        email_service.send() 

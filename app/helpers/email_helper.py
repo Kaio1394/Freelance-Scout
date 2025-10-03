@@ -23,6 +23,8 @@ class EmailHelper:
                 return "smtp.gmail.com", 587
             case "hotmail":
                 return "smtp.office365.com", 587    
+            case "zoho":
+                return "smtp.zoho.com", 587
             case "outlook":
                 return "smtp.office365.com", 587 
             case _:

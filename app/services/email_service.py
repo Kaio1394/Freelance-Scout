@@ -10,6 +10,7 @@ class EmailService:
         
     def define_configs_email(self, subject: str, body: str):
         self.email_helper.set_subject(subject)
+        self.email_helper.set_email_to(os.getenv("EMAIL_TO"))
         self.email_helper.set_type_server_email(os.getenv("EMAIL_SERVER"))
         self.email_helper.set_body(body)
         
