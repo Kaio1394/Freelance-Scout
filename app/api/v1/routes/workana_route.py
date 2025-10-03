@@ -1,15 +1,28 @@
 from fastapi import APIRouter, Depends, Header, HTTPException, status
 from app.services.workana_service import WorkanaService
-from app.dependencies import get_workana_service
+from app.dependencies import get_workana_service, get_email_service
 from app.schemas.freelancer_schema import FreelancerBase
 import time
 from app.schemas.response_schema import ResponseSearchJobs
+from app.services.email_service import EmailService
 
 workana_route_v1 = APIRouter(prefix="/api/v1/workana", tags=["Workana"])
 
 @workana_route_v1.post("/search/freelancer")
-def search_freelancer(job: str = Header(...), limit_search: int = Header(...), service: WorkanaService = Depends(get_workana_service)):
+def search_freelancer(job: str = Header(...), limit_search: int = Header(...), 
+                      service: WorkanaService = Depends(get_workana_service), 
+                      email_service: EmailService = Depends(get_email_service)):
     try:
+        email_service.define_credentials()
+        email_service.define_configs_email("Testando Kaio", "TESTEEEEE")    
+        connect, msg_erro = email_service.connect()
+        if not connect:
+            return HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Internal error: {msg_erro}"
+            )
+        email_service.send() 
+        
         service.navigate_to_freelancer_jobs_page()
         if service.div_cookies_exist():
             service.click_accept_cookies()

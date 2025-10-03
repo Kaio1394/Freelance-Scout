@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from datetime import date
 
 class FreelancerBase(BaseModel):
     title: str
@@ -8,3 +9,4 @@ class FreelancerBase(BaseModel):
     stars: str
     skills: list[str]
     link: str
+    # publish_date: date
