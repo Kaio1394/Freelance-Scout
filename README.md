@@ -10,6 +10,8 @@
 
 ## API Endpoint
 
+![alt text](image-1.png)
+
 ### Search Freelancers
 
 **Response Example:**
