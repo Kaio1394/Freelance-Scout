@@ -16,8 +16,6 @@
 - `job` (string, required): Term to search for, e.g., "Automação"
 - `limit-search` (integer, required): Maximum number of results, e.g., 15
 
-### Search Freelancers
-
 **Response Example:**
 
 ```json
