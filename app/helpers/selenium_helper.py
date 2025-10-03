@@ -25,7 +25,7 @@ class SeleniumHelper:
         if self.browser == "chrome":
             opts = ChromeOptions()
             if self.headless:
-                # opts.add_argument("--headless=new")
+                opts.add_argument("--headless=new")
                 opts.add_argument("--window-size=1920,1080")
                 opts.add_argument("--disable-gpu")
                 opts.add_argument("--no-sandbox")

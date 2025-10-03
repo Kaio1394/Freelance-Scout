@@ -12,17 +12,8 @@ workana_route_v1 = APIRouter(prefix="/api/v1/workana", tags=["Workana"])
 def search_freelancer(job: str = Header(...), limit_search: int = Header(...), 
                       service: WorkanaService = Depends(get_workana_service), 
                       email_service: EmailService = Depends(get_email_service)):
+    list_jobs: list[FreelancerBase]
     try:
-        # email_service.define_credentials()
-        # email_service.define_configs_email("Testando Kaio", "TESTEEEEE")    
-        # connect, msg_erro = email_service.connect()
-        # if not connect:
-        #     return HTTPException(
-        #         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        #         detail=f"Internal error: {msg_erro}"
-        #     )
-        # email_service.send()
-        
         service.navigate_to_freelancer_jobs_page()
         if service.div_cookies_exist():
             service.click_accept_cookies()
@@ -38,20 +29,21 @@ def search_freelancer(job: str = Header(...), limit_search: int = Header(...),
         if service.div_register_exist():
             service.click_close_div_register()
             
-        list_jobs: list[FreelancerBase] = service.get_all_jobs(limit_search)
-        return ResponseSearchJobs(quantity_jobs=len(list_jobs), jobs=list_jobs)
-    except Exception as err:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Internal error: {str(err)}"
-        )
-    finally:
+        list_jobs = service.get_all_jobs(limit=limit_search)
+        html = email_service.generate_html(list_freela=list_jobs)
+        
         email_service.define_credentials()
-        email_service.define_configs_email("Testando Kaio", "TESTEEEEE")    
+        email_service.define_configs_email()    
         connect, msg_erro = email_service.connect()
         if not connect:
             return HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"Internal error: {msg_erro}"
             )
-        email_service.send() 
+        email_service.send(html=html) 
+        return ResponseSearchJobs(quantity_jobs=len(list_jobs), jobs=list_jobs)
+    except Exception as err:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Internal error: {str(err)}"
+        )

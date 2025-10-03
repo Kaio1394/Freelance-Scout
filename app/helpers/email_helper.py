@@ -2,6 +2,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from app.helpers.exceptions import EmailConnectionError, EmailSendError
+from app.schemas.freelancer_schema import FreelancerBase
 
 STATUS_CONNECTION_ACTIVE = 205
 
@@ -14,7 +15,7 @@ class EmailHelper:
         self.__email_to: str = None
         self.__subject: str = None
         self.__message = None
-        self.__body = None
+        self.__body_html = None
         self.__server = None
     
     def _get_server_email(self, type_server: str) -> tuple[str, int]:
@@ -60,7 +61,8 @@ class EmailHelper:
             self.__message["From"] = self.__email
             self.__message["To"] = self.__email_to
             self.__message["Subject"] = self.__subject
-            self.__message.attach(MIMEText(self.__body, "plain"))          
+            # self.__message.attach(MIMEText(self.__body, "plain"))
+            self.__message.attach(MIMEText(self.__body_html, "html"))
             self.__server.sendmail(self.__email, self.__email_to, self.__message.as_string())
         except Exception as e:
             raise EmailSendError(str(e))
@@ -77,6 +79,6 @@ class EmailHelper:
         
     def set_subject(self, subject: str):
         self.__subject = subject
-        
-    def set_body(self, body: str):
-        self.__body = body
+               
+    def set_body_html(self, html: str):
+        self.__body_html = html
