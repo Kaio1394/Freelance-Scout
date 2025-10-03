@@ -10,7 +10,11 @@
 
 ## API Endpoint
 
-![alt text](image-1.png)
+**POST** `/api/v1/workana/search/freelancer` - Search Freelancer
+
+**Headers:**
+- `job` (string, required): Term to search for, e.g., "Automação"
+- `limit-search` (integer, required): Maximum number of results, e.g., 15
 
 ### Search Freelancers
 
