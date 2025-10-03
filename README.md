@@ -42,7 +42,11 @@
 
 ### Installation
 
-git clone https://github.com/Kaio1394/Freelance-Scout
-cd freelancer-scout
-pip install -r requirements.txt
-.\start.ps1
+- git clone https://github.com/Kaio1394/Freelance-Scout
+- cd freelancer-scout
+- pip install -r requirements.txt
+- .\start.ps1
+
+### Email body example:
+
+![alt text](image.png)
