@@ -53,4 +53,4 @@
 
 ### Email body example:
 
-![alt text](image.png)
+![alt text](html_email.png)
