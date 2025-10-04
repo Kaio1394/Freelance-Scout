@@ -1,19 +1,50 @@
 from fastapi import APIRouter, Depends, Header, HTTPException, status
 from app.services.workana_service import WorkanaService
-from app.dependencies import get_workana_service, get_email_service
+from app.dependencies import get_workana_service, get_email_service, get_excel_service
 from app.schemas.freelancer_schema import FreelancerBase
 import time
 from app.schemas.response_schema import ResponseSearchJobs
 from app.services.email_service import EmailService
+from app.services.excel_service import ExcelService
 
 workana_route_v1 = APIRouter(prefix="/api/v1/workana", tags=["Workana"])
 
+@workana_route_v1.post("/search/freelancer/xlsx")
+def search_freelancer_xlsx(path_excel: str = Header(...), tab: str = Header(...),
+                    service: WorkanaService = Depends(get_workana_service), 
+                    email_service: EmailService = Depends(get_email_service),
+                    excel_service: ExcelService = Depends(get_excel_service)):
+    try:
+        if not path_excel.strip():
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Header 'path_excel' is requirement."
+            )
+        df = excel_service.get_dataframe(path_excel, tab)
+        
+    except Exception as err:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Internal error: {str(err)}"
+        )
+
 @workana_route_v1.post("/search/freelancer")
 def search_freelancer(job: str = Header(...), limit_search: int = Header(...), 
-                      service: WorkanaService = Depends(get_workana_service), 
-                      email_service: EmailService = Depends(get_email_service)):
+                    service: WorkanaService = Depends(get_workana_service), 
+                    email_service: EmailService = Depends(get_email_service)):
     list_jobs: list[FreelancerBase]
     try:
+        if not job.strip():
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Header 'job' is requirement."
+            )
+        if limit_search is None or limit_search < 1:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Header 'limit_search' can't be less than 1."
+            )
+        
         service.navigate_to_freelancer_jobs_page()
         if service.div_cookies_exist():
             service.click_accept_cookies()
